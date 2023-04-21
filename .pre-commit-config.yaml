@@ -8,7 +8,7 @@ repos:
     rev: 'v0.0.253'
     hooks:
     - id: ruff
-      files: ^migrations/
+      files: ^migrations
       args:
         - --line-length=120
 -   repo: https://github.com/psf/black
@@ -26,7 +26,7 @@ repos:
     rev: 6.3.0
     hooks:
       - id: pydocstyle
-        files: ^migrations/
+        files: ^migrations
         name: pydocstyle
         description: pydocstyle is a static analysis tool for checking compliance with Python docstring conventions.
         entry: pydocstyle
