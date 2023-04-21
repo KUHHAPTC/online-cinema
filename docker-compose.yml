@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: online_cinema
+    # command: uvicorn app.main:app --reload --host 0.0.0.0
+    command: bash -c "uvicorn app.main:app --reload --host 0.0.0.0"
+    volumes:
+      - ./:/app
+    ports:
+      - 8008:8000
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: cinema_db
+    image: postgres:13
+    ports:
+      - "$POSTGRES_PORT:5432"
+    env_file:
+      - .env
