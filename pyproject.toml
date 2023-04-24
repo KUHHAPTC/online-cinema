@@ -11,12 +11,12 @@ python = "^3.10"
 fastapi = "^0.95.1"
 uvicorn = {extras = ["standard"], version = "^0.21.1"}
 sqlalchemy = "^2.0.9"
-psycopg2-binary = "^2.9.6"
 pydantic = {extras = ["email"], version = "^1.10.7"}
 pylint-pydantic = "^0.1.8"
 asyncpg = "^0.27.0"
 alembic = "^1.10.3"
 python-dotenv = "^1.0.0"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 
 
 [tool.poetry.group.dev.dependencies]

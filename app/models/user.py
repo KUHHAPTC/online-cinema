@@ -1,11 +1,18 @@
-from sqlalchemy import Column, Date, Float, ForeignKey, Integer, String, Table
-from sqlalchemy.orm import relationship
+from sqlalchemy import (  # Date, Float, ForeignKey, Integer, String, Table
+    Column,
+    Integer,
+    String,
+)
 
 # from app.schemas.user import UserRole
 from app.models.base import Base
 
+# from sqlalchemy.orm import relationship
+
 
 class User(Base):
+    """Sqlalchemy model of user."""
+
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
@@ -16,7 +23,8 @@ class User(Base):
     role = Column(Integer, default=1)
 
 
-#     movies = relationship("Movie_User", back_populates="movie", cascade="save-update, merge, delete", passive_deletes=True)
+#     movies = relationship("Movie_User", back_populates="movie",
+# cascade="save-update, merge, delete", passive_deletes=True)
 
 
 # class Movie_User(Base):
@@ -27,8 +35,10 @@ class User(Base):
 #     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
 #     rating = Column(Float)
 
-#     movie = relationship("User", back_populates="movies", cascade="save-update, merge, delete", passive_deletes=True)
-#     user = relationship("Movie", back_populates="watchers", cascade="save-update, merge, delete", passive_deletes=True)
+#     movie = relationship("User", back_populates="movies",
+# cascade="save-update, merge, delete", passive_deletes=True)
+#     user = relationship("Movie", back_populates="watchers",
+# cascade="save-update, merge, delete", passive_deletes=True)
 
 
 # # movie_genre = Table("movies_genres", Base.metadata,
@@ -54,12 +64,15 @@ class User(Base):
 #     year = Column(Integer)
 #     date_of_release = Column(Date, nullable=False)
 #     path_to_file = Column(String, nullable=False)
-#     watchers = relationship("Movie_User", back_populates="user", cascade="save-update, merge, delete", passive_deletes=True)
+#     watchers = relationship("Movie_User", back_populates="user", cascade="save-update,
+# merge, delete", passive_deletes=True)
 # genres = relationship("Movie_Genre", back_populates="genre")
 # also we could make in User table: movies = relationship("Movie", secondary=movie_user, bachref="watchers")
 #     # in case if there no extra data :
-#     genres = relationship("Genre", secondary=movie_genre, back_populates="movies", cascade="save-update, merge, delete", passive_deletes=True)
-#     castmembers = relationship("CastMember", secondary=movie_castmember, back_populates="movies", cascade="save-update, merge, delete", passive_deletes=True)
+#     genres = relationship("Genre", secondary=movie_genre, back_populates="movies",
+# cascade="save-update, merge, delete", passive_deletes=True)
+#     castmembers = relationship("CastMember", secondary=movie_castmember,
+# back_populates="movies", cascade="save-update, merge, delete", passive_deletes=True)
 
 # class Genre(Base):
 #     __tablename__ = "genres"
@@ -67,7 +80,8 @@ class User(Base):
 #     id = Column(Integer, primary_key=True)
 #     name = Column(String, nullable=False)
 #     description = Column(String, nullable=False)
-#     movies = relationship("Movie", secondary=movie_genre, back_populates="genres", cascade="save-update, merge, delete", passive_deletes=True)
+#     movies = relationship("Movie", secondary=movie_genre, back_populates="genres",
+# cascade="save-update, merge, delete", passive_deletes=True)
 
 
 # class CastMember(Base):
@@ -79,4 +93,5 @@ class User(Base):
 #     description = Column(String, nullable=False)
 #     age = Column(Integer)
 #     role = Column(String)
-#     movies = relationship("Movie", secondary=movie_castmember, back_populates="castmembers", cascade="save-update, merge, delete", passive_deletes=True)
+#     movies = relationship("Movie", secondary=movie_castmember, back_populates="castmembers",
+# cascade="save-update, merge, delete", passive_deletes=True)

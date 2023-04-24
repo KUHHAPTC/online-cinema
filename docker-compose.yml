@@ -4,8 +4,7 @@ services:
   web:
     build: .
     container_name: online_cinema
-    # command: uvicorn app.main:app --reload --host 0.0.0.0
-    command: bash -c "uvicorn app.main:app --reload --host 0.0.0.0"
+    command: bash -c "alembic upgrade head && uvicorn app.main:app --reload --host 0.0.0.0"
     volumes:
       - ./:/app
     ports:
@@ -13,6 +12,7 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+      - .secret.env
     depends_on:
       - postgres
 
@@ -23,3 +23,5 @@ services:
       - "$POSTGRES_PORT:5432"
     env_file:
       - .env
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
