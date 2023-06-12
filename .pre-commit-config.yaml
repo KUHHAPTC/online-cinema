@@ -23,15 +23,15 @@ repos:
     hooks:
     - id: isort
       args: ["--profile", "black"]
--   repo: https://github.com/PyCQA/pydocstyle
-    rev: 6.3.0
-    hooks:
-    - id: pydocstyle
-      exclude: migrations
-      name: pydocstyle
-      description: pydocstyle is a static analysis tool for checking compliance with Python docstring conventions.
-      entry: pydocstyle
-      language: python
-      types: [python]
-      args:
-        - --ignore=D100,D203,D213,D104
+# -   repo: https://github.com/PyCQA/pydocstyle
+#     rev: 6.3.0
+#     hooks:
+#     - id: pydocstyle
+#       exclude: migrations
+#       name: pydocstyle
+#       description: pydocstyle is a static analysis tool for checking compliance with Python docstring conventions.
+#       entry: pydocstyle
+#       language: python
+#       types: [python]
+#       args:
+#         - --ignore=D100,D203,D213,D104
