@@ -17,11 +17,15 @@ asyncpg = "^0.27.0"
 alembic = "^1.10.3"
 python-dotenv = "^1.0.0"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.2.2"
 pyright = "^1.1.303"
+
+[tool.pylint."FORMAT"]
+max-line-length = 120
 
 [tool.pylint.main]
 load-plugins = ["pylint_pydantic"]
