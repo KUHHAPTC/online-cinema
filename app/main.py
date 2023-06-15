@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 # from app.database import create_all
-from app.routers import auth_router
+from app.routers import auth_router, user_router
 
 
 @asynccontextmanager
@@ -18,6 +18,7 @@ async def lifespan(application: FastAPI):
 def init_routers(application: FastAPI) -> None:
     """Initialuze endpoints from whole application."""
     application.include_router(auth_router, prefix="/auth")
+    application.include_router(user_router, prefix="/users")
 
 
 def create_app() -> FastAPI:

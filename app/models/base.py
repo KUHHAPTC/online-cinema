@@ -18,7 +18,7 @@ class Base:
 
     Methods
     -------
-    save(db_session: AsyncSession):
+    insert(db_session: AsyncSession):
         Insert value in database
     delete(db_session: AsyncSession):
         Remove value from database
@@ -35,7 +35,7 @@ class Base:
     # def __tablename__(self) -> str:
     #     return self.__name__.lower()
 
-    async def save(self, db_session: AsyncSession) -> None:
+    async def insert(self, db_session: AsyncSession) -> None:
         """Insert value in database.
 
         Parameters
@@ -94,7 +94,7 @@ class Base:
         """
         for k, v in kwargs.items():
             setattr(self, k, v)
-        await self.save(db_session)
+        await self.insert(db_session)
 
     # async def save_or_update(self, db_sessions: AsyncSession):
     #     try:

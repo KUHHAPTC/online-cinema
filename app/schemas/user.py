@@ -10,46 +10,28 @@ class UserRole(IntEnum):
 
 
 class UserBase(BaseModel):
-    email: str
-    first_name: str
-    last_name: Optional[str]
-
-
-class UserCreateModel(UserBase):
     email: EmailStr
     first_name: str
     last_name: Optional[str] = None
-    password: str = Field(..., min_length=4)
 
-    class Config:
-        orm_mode = True
-        allow_population_by_field_name = True
+
+class UserCreateModel(UserBase):
+    password: str = Field(..., min_length=4)
 
 
 class UserLoginModel(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
 
-class UserIdModel(BaseModel):
-    user_id: int
-
-
 class UserResponseModel(UserBase):
-    email: str
-    first_name: str
-    last_name: Optional[str]
-
     class Config:
         orm_mode = True
         allow_population_by_field_name = True
 
 
-class UserResponseModelExtended(BaseModel):
+class UserResponseModelExtended(UserBase):
     id: int
-    email: str
-    first_name: str
-    last_name: Optional[str]
     role: UserRole
 
     @property

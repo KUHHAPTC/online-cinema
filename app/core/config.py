@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     """Settings for fastapi application."""
 
     ASYNCPG_URL: PostgresDsn  # takes value from .env file
+    SECRET: str  # takes value from .env file
 
     JWT_TOKEN_PREFIX: str = "Bearer"
     ACCESS_TOKEN_LIFETIME: timedelta = timedelta(days=31)
