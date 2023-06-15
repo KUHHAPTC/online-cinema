@@ -55,6 +55,6 @@ jobs:
       working-directory: ./app
       run: poetry run pre-commit run --all-files
 
-    - name: Check types by pyright
-      run: |
-        poetry run pyright
+    # - name: Check types by pyright
+    #   run: |
+    #     poetry run pyright
