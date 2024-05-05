@@ -1,27 +1,29 @@
 [tool.poetry]
 name = "online-cinema"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = ["Eugene Snopok <eugenesnopok@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = "^0.95.1"
+fastapi = "^0.109.1"
 uvicorn = {extras = ["standard"], version = "^0.21.1"}
 sqlalchemy = "^2.0.9"
-pydantic = {extras = ["email"], version = "^1.10.7"}
-pylint-pydantic = "^0.1.8"
+pydantic = {extras = ["email"], version = "^2.7.0"}
+pylint-pydantic = "^0.3.2"
 asyncpg = "^0.27.0"
 alembic = "^1.10.3"
 python-dotenv = "^1.0.0"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+pydantic-settings = "^2.2.1"
+redis = "^5.0.4"
 
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.2.2"
-pyright = "^1.1.303"
+pyright = "^1.1.333"
 
 [tool.pylint."FORMAT"]
 max-line-length = 120
