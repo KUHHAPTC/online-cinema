@@ -1,43 +1,33 @@
-from enum import IntEnum, auto
-from typing import Optional
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
-from pydantic import BaseModel, EmailStr, Field
-
-
-class UserRole(IntEnum):
-    AUTHORIZED = auto()  # 1
-    ADMIN = auto()
+from app.models.enums import Role
 
 
-class UserBase(BaseModel):
-    email: EmailStr
-    first_name: str
-    last_name: Optional[str] = None
-
-
-class UserCreateModel(UserBase):
-    password: str = Field(..., min_length=4)
-
-
-class UserLoginModel(BaseModel):
+class UserLoginSchema(BaseModel):
     email: EmailStr
     password: str
 
 
-class UserResponseModel(UserBase):
-    class Config:
-        orm_mode = True
-        allow_population_by_field_name = True
+class UserResponseSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True, revalidate_instances="always")
+
+    email: EmailStr
+    first_name: str
+    last_name: str | None = None
 
 
-class UserResponseModelExtended(UserBase):
+class UserCreateSchema(UserResponseSchema):
+    password: str = Field(..., min_length=4)
+
+
+class UserResponseExtendedSchema(UserResponseSchema):
     id: int
-    role: UserRole
-
-    @property
-    def is_authorized(self):
-        return self.role == UserRole.AUTHORIZED
+    role: Role
 
     @property
     def is_admin(self):
-        return self.role == UserRole.ADMIN
+        return self.role == Role.ADMIN
+
+
+class UserSchema(UserResponseExtendedSchema):
+    password: str = Field(..., min_length=4)

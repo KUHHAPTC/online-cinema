@@ -1,89 +1,85 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, Depends, status
 
-from app.core.database import get_db
+from app.core.exceptions import InvalidCredentialsException
 from app.core.jwt import decode_refresh_token, encode_access_token, encode_refresh_token
 from app.core.security import Hasher
-from app.crud import get_user
-from app.models.user import User
-from app.schemas.token import TokenObtainPair, TokenRefreshModel
-from app.schemas.user import UserCreateModel, UserLoginModel, UserResponseModel
+from app.dependencies import get_user_service
+from app.schemas import (
+    TokenObtainPairSchema,
+    TokenRefreshSchema,
+    UserCreateSchema,
+    UserLoginSchema,
+    UserResponseSchema,
+)
+from app.services.user import UserService
 
 auth_router = APIRouter(tags=["auth"])
 
 
 @auth_router.post(
-    "/signup", summary="User signup.", status_code=status.HTTP_201_CREATED, response_model=UserResponseModel
+    "/signup", summary="User signup.", status_code=status.HTTP_201_CREATED, response_model=UserResponseSchema
 )
-async def create_user(user: UserCreateModel, db_session: AsyncSession = Depends(get_db)) -> User:
+async def create_user(user_create: UserCreateSchema, user_service: UserService = Depends(get_user_service)):
     """Create new user.
 
     Parameters
     ----------
-    user: UserCreateModel
+    user_create: UserCreateModel
         Pydantic model for user creation
-    db_session: AsyncSession
-        Asynchronous connection to database
+    user_service: UserService
+        Service for user operations
 
     Returns
     -------
-    new_user: User
-        Sqlalchemy model with neccessary field, however it returns pydantic UserResponseModel
+    user: UserResponseSchema
+        Inserted user model without password
 
     """
-    user_object = await get_user(user.email, db_session)
-    if user_object:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User with this email already exist")
-    new_user = User(**{**user.dict(), "password": Hasher.get_password_hash(user.password)})
-    await new_user.insert(db_session)
-    return new_user
+    await user_service.is_user_exist(email=user_create.email)
+    user_create.password = Hasher.get_password_hash(user_create.password)
+    user = await user_service.create(obj=user_create)
+    return user
 
 
 @auth_router.post(
     "/login",
     summary="User login.",
     status_code=status.HTTP_200_OK,
-    response_model=TokenObtainPair,
+    response_model=TokenObtainPairSchema,
 )
-async def login(user: UserLoginModel, database: AsyncSession = Depends(get_db)):
+async def login(user: UserLoginSchema, user_service: UserService = Depends(get_user_service)):
     """User login.
 
     Parameters
     ----------
     user: UserLoginModel
         Pydantic model for user sign in
-    db_session: AsyncSession
-        Asynchronous connection to database
+    user_service: UserService
+        Service for user operations
 
     Returns
     -------
-    TokenObtaionPair: Jwt token model with access and refresh tokens
+    TokenObtainPairSchema: Jwt token model with access and refresh tokens
 
     """
-    executed_query = await database.execute(select(User.password).where(User.email == user.email))
-    password_from_db = result[0] if (result := executed_query.fetchone()) else None
-    if not password_from_db:
-        #     # raise UserNotFoundException(user_email=user.email)
-        raise SystemExit
+    exist_user = await user_service.get_user_by_email(email=user.email)
 
-    if not Hasher.verify_password(user.password, password_from_db):
-        raise SystemExit
-    #     # raise PasswordDoesNotMatchException
+    if not Hasher.verify_password(user.password, exist_user.password):
+        raise InvalidCredentialsException
 
     refresh = encode_refresh_token(user_email=user.email)
     access = encode_access_token(user_email=user.email)
 
-    return TokenObtainPair(access=access, refresh=refresh)
+    return TokenObtainPairSchema(access=access, refresh=refresh)
 
 
 @auth_router.post(
     "/token/refresh",
     summary="Generates new access token via refresh token.",
     status_code=status.HTTP_200_OK,
-    response_model=TokenObtainPair,
+    response_model=TokenObtainPairSchema,
 )
-def refresh_access_token(token: TokenRefreshModel):
+def refresh_access_token(token: TokenRefreshSchema):
     """Refresh access token for jwt token.
 
     Parameters
@@ -93,10 +89,10 @@ def refresh_access_token(token: TokenRefreshModel):
 
     Returns
     -------
-    TokenObtaionPair: Jwt token model with access and refresh tokens
+    TokenObtaionPairSchema: Jwt token model with access and refresh tokens
 
     """
     payload = decode_refresh_token(refresh_token=token.refresh)
     access = encode_access_token(user_email=payload["email"])
 
-    return TokenObtainPair(access=access, refresh=token.refresh)
+    return TokenObtainPairSchema(access=access, refresh=token.refresh)

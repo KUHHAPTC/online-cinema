@@ -1,9 +1,9 @@
 from pydantic import BaseModel
 
 
-class TokenRefreshModel(BaseModel):
+class TokenRefreshSchema(BaseModel):
     refresh: str
 
 
-class TokenObtainPair(TokenRefreshModel):
+class TokenObtainPairSchema(TokenRefreshSchema):
     access: str

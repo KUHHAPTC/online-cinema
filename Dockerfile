@@ -1,5 +1,5 @@
-FROM python:3.10.5-bullseye
-WORKDIR /app
+FROM python:3.11.9-bullseye
+WORKDIR /online_cinema
 
 ENV PYTHONPATH "${PYTHONPATH}:."
 
