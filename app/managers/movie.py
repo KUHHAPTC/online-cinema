@@ -30,17 +30,6 @@ class MovieManager(BaseManager[MovieORM, MovieCreateSchema, MovieCreateSchema]):
         return await self._apply_changes(stmt=stmt, flush=flush)
 
     async def get_movie_with_reviews(self, movie_id: int) -> MovieORM:
-        """
-        Creates an entity in the database and returns the created object.
-
-        Args:
-            obj (MovieCreateSchema): The object to create.
-            flush (bool, optional): If True, flush changes immediately, otherwise commit changes.
-
-        Returns:
-            The created object.
-        """
-
         query = (
             self.get_query()
             .options(selectinload(self.sql_model.reviews).joinedload(ReviewORM.watcher))
