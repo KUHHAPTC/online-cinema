@@ -1,19 +1,17 @@
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.core.config import get_settings
+from app.core.config import get_db_settings
 
-# from app.models.base import Base
-
-global_settings = get_settings()
+global_settings = get_db_settings()
 
 engine = create_async_engine(
-    global_settings.ASYNCPG_URL,
+    global_settings.ASYNCPG_DSN,
     future=True,
     echo=True,
 )
 
-# expire_on_commit=False will prevent attributes from being expired afted commit.
+# expire_on_commit=False will prevent attributes from being expired after commit.
 async def get_db() -> AsyncSession:
     """Create connection to database."""
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
