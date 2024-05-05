@@ -10,7 +10,7 @@ Manager = TypeVar("Manager", bound=BaseManager)
 
 
 class BaseService(ABC, Generic[Manager, Schema, CreateSchema]):
-    """Layer between managers and API."""
+    """Layer between managers and API. Returns Pydantic object."""
 
     manager_class: ClassVar[Manager]
     schema: ClassVar[Schema]
